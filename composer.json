@@ -1,0 +1,34 @@
+{
+  "name": "happy-types/enumerable-type",
+  "description": "Strongly typed implementation of enumerable type in PHP which helps us to write a safer more readable code.",
+  "keywords": [
+    "enum",
+    "enumerable",
+    "java enum",
+    "enumerable type"
+  ],
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Antanas Arvasevicius",
+      "email": "antanas.arvasevicius@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^5.4 || ^7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8 || ^5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "HappyTypes\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HappyTypes\\Test\\EnumerableType\\": "test"
+    }
+  }
+}
