@@ -217,7 +217,7 @@ Better create "Unknown" option in your enum. That way you can write nicer code i
     function getPaymentMethod() {
        return PaymentMethod::fromId($id);
     }
-
+```
 
 ## Ending
 
