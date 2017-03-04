@@ -42,19 +42,22 @@
  
  This was designed in a way that enum would look like it's a default PHP language construct, easy to create and easy to use.
 
+
 ## What's benefits?
 
 * No hardcoded literals in your code
 * Allows to type hint any argument of method to accept only a specific type of enumerable
 * All getters and return types can be hinted to return a specific enumerable
-* Single point of how these enum object could be created. e.g. only by CompanyType::fromId($companyTypeId)
+* Single point of how these enum objects could be created. e.g. only by CompanyType::fromId($companyTypeId)
 * Team in project can think in terms of enumerable types instead of strings/ints
 * Full IDE support for Find Usages, Refactoring, etc.
 * Easy enumeration of available enumerable types (e.g. CompanyType::enum() returns an array of available CompanyType objects)
 
+
 ## Is it production ready?
 
 Yes, this code was written more than a year ago and it's still running in production.
+
 
 ## Easy to use
 
@@ -80,10 +83,88 @@ Just create a class which you want to be enumerable and extend `EnumerableType`.
 That`s it! No more constants or primitives just valid **objects** which supports **strong typing**.
 
 
+## API documentation
+
+To create a new enumerable type you need to extend `EnumerableType` class and add as much methods as you need options for that type.  
+Methods must be in format:  
+`final public static YourOption() { return static::get('your_option_id', 'your_option_name'); }`.
+
+`Your_option_name` argument is optional, if it's not specified then option `name` will be equal to `id`.
+
+
+Your created classes will contain only two additional static methods:
+ 
+* CompanyType::fromId($id) - Method returns an **option object** which represents a specific option of CompanyType
+* CompanyType::enum()      - Method will return an array of all options(as **option objects**) available
+
+Also you should use your added `final public static` methods to retrieve an **option objects**.
+
+Any  **option object** contains two methods:
+
+* id() - returns an option id ('your_option_id') e.g. `CompanyType::Private()->id()` 
+* name() - returns an option name ('your_option_name') e.g. `CompanyType::Private()->name()`
+
+P.S. option id and option name is not restricted just to `string` types, just pass to your static::get(...) what's needed.
+
+
+## Explanation of workings
+
+**Option objects** will be instances of a given enumerable type .e.g. CompanyType::Private() will return object of CompanyType which represents "Private" option.  
+Notice: Option objects are created only once per each option and will be `1:1` representation of an option. It means that there impossible to have two objects in a system which represents the same enumerable option. This library uses objects as identities of specific options.
+
+By holding that identity rule we can see these **option objects** as a **subtypes** of type of **CompanyType** (analog to: subclass of class, but no need to have a real extended classes).  
+Confused? Ok, lets try again, here is an alternative implementation of `EnumerableType` using just classes:
+```php
+	class CompanyEnum { }
+    class CompanyEnum_Private extends CompanyEnum {}
+    class CompanyEnum_Public extends CompanyEnum {}
+    class CompanyEnum_Unknown extends CompanyEnum {}
+```
+By having this structure the same results can be achieved:
+```php
+    function fromId($id) {
+    	switch ($id) {
+        	case 'private': return new CompanyEnum_Private();
+            case 'public': return new CompanyEnum_Public();
+            case null: return new CompanyEnum_Unknown();
+            default: throw new \RuntimeException("unhandled {$id}");
+        }
+    }
+    
+	function doSomething(CompanyEnum $companyEnum) {
+         if ($companyEnum instanceof CompanyEnum_Private) {
+           // ...
+         }
+    }
+```
+But in this implementation, identity of specific option is based on **class name** rather than an objects itself.  
+And if an object can represent exactly one option in the same way as in this example subclass represents one option then we can apply the same semantics of "instanceof" without any subclasses, but just by using strict equality (`===`) and avoiding any subclassing at all.
+
+
 ## Installation
 
     `composer require happy-types/enumerable-type`
 
+## Code convention: UPPERCASE vs PascalCase
+
+Probably you've just seen an "awkward"(not familiar in PHP, but default in C#) method naming in this library examples, but that was chosen intentionally.
+
+There was a need in a team to somehow mark this "new" style of pattern in a way that any PHP developer could clearly identify where enumerable type logics is playing in code.
+
+There was a couple of options, one was UPPERCASE_NOTATION. But UPPERCASE variables already has a meaning - it's constants.  
+Also writing method in all uppercase is really strange e.g. `final public static function DO_NOT_NEED_INSPECTION(){ }`.  
+It also reminds me an old `C/C++` times (underscored variables and macros in uppercase...).
+
+What's left?
+
+Regular method naming - camelCased.  
+Regular method naming is an option, but that doesn't express a fact that our methods is somewhat special - every method returns only one unique object - **option object**.
+
+So to express the fact that these methods returns **option objects** we've chosen to use camelCase with first case uppered also known as - PascalCase.
+
+Therefore, PascalCase it's just recommended coding style which we are using in our team internally. Important is to choose one and be consistent with it.
+    
+        
 ## Extras
 
 Here are some other best practices which we've developed in using `EnumerableType`:
@@ -228,8 +309,3 @@ And happy coding!
 
 
 Antanas A. (antanas.arvasevicius@gmail.com)
-
-
-
-
-
