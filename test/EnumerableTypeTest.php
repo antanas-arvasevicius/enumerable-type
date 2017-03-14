@@ -64,4 +64,13 @@ class EnumerableTypeTest extends PHPUnit_Framework_TestCase
         Test123Type::fromId('some_non_existent_id');
     }
 
+    /**
+     * @test
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage PHP serialization of EnumerableType is not supported. [HappyTypes\Test\EnumerableType\TestObjects\Test123Type]
+     */
+    public function it_must_forbid_php_serialization()
+    {
+        serialize(Test123Type::First());
+    }
 }
