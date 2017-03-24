@@ -129,14 +129,12 @@ abstract class EnumerableType
      */
     private static function valueToString($id)
     {
-        switch (true) {
-            case is_null($id):
-                return 'null';
-            default:
-                switch (gettype($id)) {
-                    case 'boolean':
-                        return $id ? 'true' : 'false';
-                }
+        if (is_null($id)) {
+            return 'null';
+        }
+
+        if (is_bool($id)) {
+            return $id ? 'true' : 'false';
         }
 
         return $id;
