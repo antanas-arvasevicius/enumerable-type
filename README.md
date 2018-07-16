@@ -64,20 +64,20 @@ Yes, this code was written more than a year ago and it's still running in produc
 Just create a class which you want to be enumerable and extend `EnumerableType`.
 ```php
     class CompanyType extends EnumerableType {
-       final public static Unknown() { return static::get(null); }       
-       final public static Private() { return static::get('private'); }       
-       final public static Public() { return static::get('public'); }
+       final public static function Unknown() { return static::get(null); }       
+       final public static function Private() { return static::get('private'); }       
+       final public static function Public() { return static::get('public'); }
     }
     
     class PaymentMethod extends EnumerableType {
-       final public static Unknown() { return static::get(null); }       
-       final public static Cash() { return static::get('cash'); }       
-       final public static CreditCard() { return static::get('credit_card'); }
+       final public static function Unknown() { return static::get(null); }       
+       final public static function Cash() { return static::get('cash'); }       
+       final public static function CreditCard() { return static::get('credit_card'); }
     }
     
     class DeliveryStatus extends EnumerableType {
-       final public static Delivered() { return static::get(1, 'delivered'); }       
-       final public static NotDelivered() { return static::get(0, 'not_delivered'); }       
+       final public static function Delivered() { return static::get(1, 'delivered'); }       
+       final public static function NotDelivered() { return static::get(0, 'not_delivered'); }       
     }
 ```
 That`s it! No more constants or primitives just valid **objects** which supports **strong typing**.
@@ -87,7 +87,7 @@ That`s it! No more constants or primitives just valid **objects** which supports
 
 To create a new enumerable type you need to extend `EnumerableType` class and add as much methods as you need options for that type.  
 Methods must be in format:  
-`final public static YourOption() { return static::get('your_option_id', 'your_option_name'); }`.
+`final public static function YourOption() { return static::get('your_option_id', 'your_option_name'); }`.
 
 `Your_option_name` argument is optional, if it's not specified then option `name` will be equal to `id`.
 
@@ -97,7 +97,7 @@ Your created classes will contain only two additional static methods:
 * CompanyType::fromId($id) - Method returns an **option object** which represents a specific option of CompanyType
 * CompanyType::enum()      - Method will return an array of all options(as **option objects**) available
 
-Also you should use your added `final public static` methods to retrieve an **option objects**.
+Also you should use your added `final public static function` methods to retrieve an **option objects**.
 
 Any  **option object** contains two methods:
 
@@ -280,8 +280,8 @@ Better create "Unknown" option in your enum. That way you can write nicer code i
 ```php
 // BAD CODE:
     class PaymentMethod extends EnumerableType {
-       final public static Cash() { return static::get('cash'); }       
-       final public static CreditCard() { return static::get('credit_card'); }
+       final public static function Cash() { return static::get('cash'); }       
+       final public static function CreditCard() { return static::get('credit_card'); }
     }
     function getPaymentMethod() {
        return $id ? PaymentMethod::fromId($id) : null;
@@ -291,9 +291,9 @@ Better create "Unknown" option in your enum. That way you can write nicer code i
 ```php
 // GOOD CODE:
     class PaymentMethod extends EnumerableType {
-       final public static Unknown() { return static::get(null); }       
-       final public static Cash() { return static::get('cash'); }       
-       final public static CreditCard() { return static::get('credit_card'); }
+       final public static function Unknown() { return static::get(null); }       
+       final public static function Cash() { return static::get('cash'); }       
+       final public static function CreditCard() { return static::get('credit_card'); }
     }
     function getPaymentMethod() {
        return PaymentMethod::fromId($id);
