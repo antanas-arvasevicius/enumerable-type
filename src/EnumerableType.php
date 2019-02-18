@@ -119,7 +119,7 @@ abstract class EnumerableType
     /**
      * Forbid PHP serialization
      */
-    public static function __sleep()
+    public function __sleep()
     {
         throw new \RuntimeException('PHP serialization of EnumerableType is not supported. [' . get_called_class() . ']');
     }

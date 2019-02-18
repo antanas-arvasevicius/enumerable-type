@@ -57,7 +57,7 @@ class EnumerableTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      */
     public function it_must_throw_exception_if_cannot_be_resolved_from_id()
     {
@@ -66,7 +66,7 @@ class EnumerableTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage PHP serialization of EnumerableType is not supported. [HappyTypes\Test\EnumerableType\TestObjects\Test123Type]
      */
     public function it_must_forbid_php_serialization()
