@@ -4,9 +4,9 @@ namespace HappyTypes\Test\EnumerableType;
 
 use HappyTypes\Test\EnumerableType\TestObjects\Test123Type;
 use HappyTypes\Test\EnumerableType\TestObjects\TestWithNameType;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class EnumerableTypeTest extends PHPUnit_Framework_TestCase
+class EnumerableTypeTest extends TestCase
 {
     /**
      * @test
